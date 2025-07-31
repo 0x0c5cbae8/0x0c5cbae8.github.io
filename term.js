@@ -154,6 +154,9 @@ class Shell {
 
     runCommand(cmd) {
         cmd = cmd.trim();
+        if(cmd===''){
+            return '';
+        }
         if(cmd==='clear'){
             return '\x1b[2J\x1b[0;0H';
         }
