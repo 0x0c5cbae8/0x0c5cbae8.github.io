@@ -1,0 +1,100 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    background-color: #aaaaaa;
+    overflow: hidden;
+}
+
+#window {
+    display: flex;
+    flex-direction: column;
+    background-color: #282a36;
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#bar {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem;
+    background-color: #44475a;
+    color: #f8f8f2;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
+#buttons {
+    margin-right: 0.5rem;
+}
+
+.traffic-light {
+    border-radius: 100%;
+    padding: 0;
+    width: 0.8rem;
+    height: 0.8rem;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-sizing: border-box;
+    margin-left: 0.3rem;
+    position: relative;
+    outline: none;
+}
+
+#close {
+    background-color: #ff6159;
+}
+
+#minimize {
+    background-color: #ffbd2e;
+}
+
+#maximize {
+    background-color: #28c941;
+}
+
+#title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-grow: 1;
+    font-family: sans-serif;
+    font-size: 1.2rem;
+}
+
+#container {
+    padding-top: 0.5rem;
+    padding-left: 0.5rem;
+    width: calc(100% - 0.5rem);
+    height: calc(100% - 0.5rem);
+}
+
+#terminal {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Applies to all scrollable elements */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px; /* for horizontal scroll */
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0; /* Track color */
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888;  /* Scrollbar handle */
+  border-radius: 4px;
+  border: 2px solid #f0f0f0; /* Optional: creates padding around the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
