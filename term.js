@@ -17,9 +17,7 @@ class IO {
         this.term.loadAddon(this.fitAddon);
         this.term.open(document.getElementById('terminal'));
         this.fitAddon.fit();
-        this.term.onData(data => {
-            this.handleInput(data);
-        });
+        this.term.onData(data => this.handleInput(data));
     }
 
     async print(output) {
@@ -31,6 +29,8 @@ class IO {
             }
             this.term.write(output, () => {
                 this.setCursorOffset();
+                this.buffer = '';
+                this.cursor = 0;
                 resolve();
             });
         });
@@ -183,12 +183,12 @@ class IO {
         }
         if (data === '\r') { // ENTER
             this.term.write(this.handleReturnKey()+'\x1b[?25l', () => {
-                this.setCursorOffset();
                 if (this.inputResolver) {
                     this.inputResolver(this.buffer);
                     this.inputResolver = null;
                     this.rejecter = null;
                 }
+                this.setCursorOffset();
                 this.buffer = '';
                 this.cursor = 0;
             });
@@ -209,6 +209,9 @@ class IO {
         else if (data === '\x7f') { // BACKSPACE
             this.term.write(this.handleBackspaceKey());
         }
+        else if (data === '\x1b') {
+            this.term.blur();
+        }
         else{
             data = this.cleanString(data);
             if (data.length !== 1) { return; }
@@ -223,16 +226,27 @@ class Shell {
     constructor() {
         this.io = new IO();
         this.cwd = '[0x0c5cbae8 ~]$ ';
-        this.io.print(this.cwd);
+        this.commands = { // PLEASE KEEP COMMANDS IN ALPHABETICAL ORDER
+            clear: async () => this.io.term.clear(),
+            test: async () => {
+                await this.io.print('please input something: ');
+                const input = await this.io.readLine();
+                await this.io.print(`You entered: ${input}\r\n`);
+                await this.io.sleep(1000);
+                await this.io.print('Test command executed successfully.\r\n');
+            }
+        }
     }
 
     async run() {
+        await this.io.print(this.cwd);
+        this.io.term.focus();
         while (true) {
             try {
                 const input = await this.io.readLine(true);
                 await this.runCommand(input);
             } catch {
-                await this.io.print('\r\n');
+                await this.io.print('^C\r\n');
             }
             await this.io.print(this.cwd);
         }
@@ -244,24 +258,13 @@ class Shell {
             await this.io.print('');
             return;
         }
-        if (cmd === 'clear') {
-            this.io.term.clear();
-            return;
+        const [cmdName, ...args] = cmd.split(/\s+/);
+        const command = this.commands[cmdName];
+        if (command) {
+            await command(...args);
+        } else {
+            await this.io.print(`${cmdName}: command not found\r\n`);
         }
-        if (cmd === 'test') {
-            await this.io.print('Test command executed successfully.\r\n');
-            const input = await this.io.readLine();
-            await this.io.sleep(1000);
-            await this.io.print(`You entered: ${input}\r\n`);
-            await this.io.print('Test command executed successfully.\r\n');
-            return;
-        }
-        if(cmd === 'test2') {
-            while(true) {
-                await this.io.print("yes\r\n");
-            }
-        }
-        await this.io.print(`${cmd}: command not found\r\n`);
     }
 }
 

@@ -8,7 +8,7 @@ html, body {
 #window {
     display: flex;
     flex-direction: column;
-    background-color: #282a36;
+    background-color: #1e1e2e;
     position: absolute;
     top: 1rem;
     left: 1rem;
@@ -68,7 +68,8 @@ html, body {
 #container {
     padding-top: 0.5rem;
     padding-left: 0.5rem;
-    width: calc(100% - 0.5rem);
+    padding-right: 0.5rem;
+    width: calc(100% - 1rem);
     height: calc(100% - 0.5rem);
 }
 
