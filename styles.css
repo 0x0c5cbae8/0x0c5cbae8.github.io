@@ -1,8 +1,11 @@
 html, body {
     height: 100%;
     margin: 0;
-    background-color: #aaaaaa;
     overflow: hidden;
+}
+
+body {
+    background: linear-gradient(to bottom right, #ee6666, #6666ee);
 }
 
 #window {
@@ -10,10 +13,10 @@ html, body {
     flex-direction: column;
     background-color: #1e1e2e;
     position: absolute;
-    top: 1rem;
-    left: 1rem;
-    right: 1rem;
-    bottom: 1rem;
+    top: 2rem;
+    left: 2rem;
+    right: 2rem;
+    bottom: 2rem;
     border-radius: 0.5rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
@@ -79,23 +82,6 @@ html, body {
     overflow: hidden;
 }
 
-/* Applies to all scrollable elements */
 ::-webkit-scrollbar {
   width: 0px;
-  height: 0px; /* for horizontal scroll */
-}
-
-::-webkit-scrollbar-track {
-  background: #f0f0f0; /* Track color */
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #888;  /* Scrollbar handle */
-  border-radius: 4px;
-  border: 2px solid #f0f0f0; /* Optional: creates padding around the thumb */
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
 }
