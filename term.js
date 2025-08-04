@@ -258,6 +258,22 @@ class Shell {
                 }
             },
 
+            hello: async (...args) => {
+                if (args.length > 0) {
+                    const output = "Hello " + args.join(" ") + " to you too!\r\n";
+                    await this.io.print(output);
+                    return;
+                }
+                await this.io.print("Hi! What is your name?\r\nResponse: ");
+                let name = await this.io.readLine();
+                name = name.trim();
+                if (name === "") {
+                    await this.io.print("You didn't tell me your name, so I will call you 'Anonymous'.\r\n");
+                    name = "Anonymous";
+                }
+                await this.io.print(`Hello, ${name}!\r\n`);
+            },
+
             help: async (...args) => {
                 if (args.length === 0) {
                     await this.io.print("Available commands:\r\n");
@@ -269,12 +285,39 @@ class Shell {
                 } else if (args.length === 1) {
                     const cmdName = args[0];
                     const command = this.commands[cmdName];
-                    if (command && command.help && command.help !== "[HIDDEN]") {
-                        await this.io.print(command.help + "\r\n");
+                    if (command && command.help !== "[HIDDEN]") {
+                        if (!command.help) {
+                            await this.io.print(`idk what this command does...\r\njust type '${cmdName}' and see what happens i guess\r\n`);
+                        } else {
+                            await this.io.print(command.help + "\r\n");
+                        }
                     } else {
                         await this.io.print("help is not available for this command.\r\n");
                     }
                 }
+            },
+
+            neofetch: async () => {
+                const output =
+                    "\x1b[92m     .                            Charlie Yang\x1b[0m\r\n" +
+                    "\x1b[92m .#@##%@+.                        \x1b[0m------------\r\n" +
+                    "\x1b[92m:@+.   .@%:                       OS\x1b[0m: 0x0c5cbae8 OS\r\n" +
+                    "\x1b[92m-@:     *@@=                      Host\x1b[0m: github.io\r\n" +
+                    "\x1b[92m.#@-. .+@=:%#.                    Kernel\x1b[0m: corn\r\n" +
+                    "\x1b[92m  :+@@%=.  .+@=                   Uptime\x1b[0m: 18yrs\r\n" +
+                    "\x1b[92m       ......-@+........          Shell\x1b[0m: shush\r\n" +
+                    "\x1b[92m      .+#######%@%######-         CPU\x1b[0m: Human(R) brain(TM)\r\n" +
+                    "\x1b[92m                =@=      ..       GPU\x1b[0m: Human(R) brain(TM) [Integrated]\r\n" +
+                    "\x1b[92m                 :%#. :@@#+%@+    Memory\x1b[0m: Healthy, no Alzheimer's\r\n" +
+                    "\x1b[92m                  .*@+@=    :%#   Locale\x1b[0m: International\r\n" +
+                    "\x1b[92m                    -@@.     #@   \x1b[0m\r\n" +
+                    "\x1b[92m                     .#@-..:*@:   \x1b[30m██\x1b[31m██\x1b[32m██\x1b[33m██\x1b[34m██\x1b[35m██\x1b[36m██\x1b[37m██\x1b[0m\r\n" +
+                    "\x1b[92m                       :+##*-.    \x1b[90m██\x1b[91m██\x1b[92m██\x1b[93m██\x1b[94m██\x1b[95m██\x1b[96m██\x1b[97m██\x1b[0m\r\n";
+                await this.io.print(output);
+            },
+
+            no: async () => {
+                await this.io.print("no u\r\n");
             },
 
             nvim: async () => {
@@ -298,6 +341,13 @@ class Shell {
             vim: async () => {
                 await this.io.print("vim: command not found. Did you mean 'emacs'?\r\n");
             },
+
+            yes: async () => {
+                while (true) {
+                    await this.io.print("yes\r\n");
+                    await this.io.sleep(100);
+                }
+            }
         }
 
         this.commands.clear.help = "Clears the terminal screen.";
@@ -306,13 +356,13 @@ class Shell {
         this.commands.exit.help = "Exits the shell.";
         this.commands.help.help = "Usage: 'help' or 'help [command]'\r\nDisplays a list of available commands or detailed information about a specific command.";
         this.commands.nvim.help = "[HIDDEN]";
-        this.commands.sudo.help = "[HIDDEN]";
+        this.commands.sudo.help = "Usage: sudo [command] [...arguments]\r\nExecute a command with superuser privileges.\r\nYou will be prompted for a password.";
         this.commands.vi.help = "[HIDDEN]";
         this.commands.vim.help = "[HIDDEN]";
     }
 
     async run() {
-        await this.io.print("Welcome to my interactive website! Here you can find everything you need.\r\n");
+        await this.io.print("Welcome to my personal website!\r\n");
         await this.io.print("Type 'help' to see available commands. Type 'help [command]' for more information on a specific command.\r\n");
         await this.io.print(this.cwd);
         this.io.term.focus();
